@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Design Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --orange: #C84B31;
+      --mustard: #E8D21D;
+      --teal: #2D6E7E;
+      --cream: #FAF3E0;
+      --walnut: #5C3D2E;
+      --warm-white: #FFF8F0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--walnut);
+      overflow-x: hidden;
+    }
+
+    /* Grain texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Jost', sans-serif;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Starburst background pattern */
+    .starburst-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      opacity: 0.06;
+      animation: slowRotate 120s linear infinite;
+    }
+
+    @keyframes slowRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .hero-chair {
+      width: 220px;
+      height: auto;
+      margin-bottom: 2rem;
+      animation: floatIn 1.2s ease-out;
+      filter: drop-shadow(0 8px 24px rgba(92, 61, 46, 0.15));
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      animation: fadeUp 1s ease-out 0.3s both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--orange);
+      font-weight: 500;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      opacity: 0.7;
+      animation: fadeUp 1s ease-out 0.6s both;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      animation: fadeUp 1s ease-out 1.2s both, bounce 2s ease-in-out 2s infinite;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      opacity: 0.5;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 30px;
+      background: var(--walnut);
+      margin: 0.5rem auto 0;
+      opacity: 0.3;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      gap: 1.5rem;
+    }
+
+    .divider-line {
+      flex: 1;
+      max-width: 200px;
+      height: 1px;
+      background: var(--walnut);
+      opacity: 0.2;
+    }
+
+    .divider svg {
+      width: 40px;
+      height: 40px;
+      opacity: 0.25;
+    }
+
+    /* ===== CATALOG SECTION ===== */
+    .catalog {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .catalog-card {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .catalog-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .catalog-card:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .catalog-chair {
+      flex-shrink: 0;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .catalog-chair svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .catalog-text {
+      flex: 1;
+    }
+
+    .catalog-text .label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .catalog-text h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+    }
+
+    .catalog-text p {
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.75;
+      font-weight: 300;
+    }
+
+    /* ===== THE ASK ===== */
+    .the-ask {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .the-ask h2 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .the-ask h2.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .the-ask h2 span {
+      color: var(--orange);
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+      position: relative;
+      min-height: 60px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .buttons.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn {
+      font-family: 'Jost', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .btn-yes {
+      background: var(--orange);
+      color: var(--warm-white);
+    }
+
+    .btn-yes:hover {
+      background: #b5412a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(200, 75, 49, 0.3);
+    }
+
+    .btn-maybe {
+      background: transparent;
+      color: var(--walnut);
+      border: 2px solid var(--walnut);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+
+    .btn-maybe:hover {
+      opacity: 1;
+    }
+
+    .btn-maybe.fleeing {
+      position: absolute;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-maybe.shrinking {
+      opacity: 0.3;
+    }
+
+    /* Tag-style detail on buttons */
+    .btn::after {
+      content: attr(data-tag);
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      font-size: 0.55rem;
+      background: var(--mustard);
+      color: var(--walnut);
+      padding: 2px 6px;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    /* ===== RESPONSE OVERLAY ===== */
+    .response-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--cream);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .response-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .response-overlay h2 {
+      font-family: 'Jost', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 0.6s ease 0.3s;
+    }
+
+    .response-overlay.active h2 {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .response-overlay p {
+      font-size: 1.2rem;
+      opacity: 0;
+      font-weight: 300;
+      transition: opacity 0.6s ease 0.6s;
+    }
+
+    .response-overlay.active p {
+      opacity: 0.7;
+    }
+
+    .response-heart {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+    }
+
+    .response-overlay.active .response-heart {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ===== CONFETTI ===== */
+    .confetti-piece {
+      position: fixed;
+      z-index: 1001;
+      pointer-events: none;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== BOOMERANG DECORATIONS ===== */
+    .boomerang {
+      position: absolute;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      .catalog-card,
+      .catalog-card:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+
+      .catalog-chair {
+        width: 150px;
+        height: 150px;
+      }
+
+      .hero-chair {
+        width: 160px;
+      }
+
+      .btn {
+        padding: 0.85rem 2rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <!-- Starburst SVG background -->
+    <svg class="starburst-bg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#5C3D2E" stroke-width="1">
+        <line x1="400" y1="0" x2="400" y2="800"/>
+        <line x1="0" y1="400" x2="800" y2="400"/>
+        <line x1="100" y1="100" x2="700" y2="700"/>
+        <line x1="700" y1="100" x2="100" y2="700"/>
+        <line x1="400" y1="0" x2="400" y2="800" transform="rotate(22.5 400 400)"/>
+        <line x1="400" y1="0" x2="400" y2="800" transform="rotate(67.5 400 400)"/>
+        <line x1="400" y1="0" x2="400" y2="800" transform="rotate(112.5 400 400)"/>
+        <line x1="400" y1="0" x2="400" y2="800" transform="rotate(157.5 400 400)"/>
+      </g>
+      <circle cx="400" cy="400" r="150" fill="none" stroke="#5C3D2E" stroke-width="0.5"/>
+      <circle cx="400" cy="400" r="300" fill="none" stroke="#5C3D2E" stroke-width="0.5"/>
+    </svg>
+
+    <!-- Eames Lounge Chair silhouette -->
+    <svg class="hero-chair" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+      <g fill="var(--walnut)">
+        <!-- Seat/shell -->
+        <path d="M60,120 Q40,100 50,70 Q60,40 100,30 Q140,20 170,25 Q200,30 230,50 Q260,70 255,100 Q250,130 240,150 L60,150 Z" opacity="0.85"/>
+        <!-- Back cushion -->
+        <path d="M65,85 Q70,55 110,45 Q150,38 180,42 Q210,48 235,65 Q245,80 240,100 L70,105 Z" fill="var(--orange)" opacity="0.6"/>
+        <!-- Seat cushion -->
+        <path d="M65,150 Q63,135 70,120 L240,120 Q245,135 242,150 Z" fill="var(--orange)" opacity="0.5"/>
+        <!-- Base/pedestal -->
+        <path d="M120,155 L115,180 Q110,190 100,195 L80,205 Q75,208 78,212 Q82,216 90,213 L130,195 L135,155 Z" opacity="0.7"/>
+        <path d="M180,155 L185,180 Q190,190 200,195 L220,205 Q225,208 222,212 Q218,216 210,213 L170,195 L165,155 Z" opacity="0.7"/>
+        <!-- Cross bar -->
+        <path d="M95,200 Q150,180 205,200" fill="none" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
+        <!-- Ottoman -->
+        <rect x="90" y="230" width="120" height="35" rx="8" opacity="0.7"/>
+        <rect x="95" y="232" width="110" height="15" rx="5" fill="var(--orange)" opacity="0.5"/>
+        <!-- Ottoman legs -->
+        <line x1="105" y1="265" x2="98" y2="278" stroke="var(--walnut)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="195" y1="265" x2="202" y2="278" stroke="var(--walnut)" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>
+
+    <h1>I've been thinking<br>about <em>design</em>...</h1>
+    <p class="subtitle">And I have a proposal for you.</p>
+
+    <div class="scroll-hint">Scroll</div>
+
+    <!-- Decorative boomerangs -->
+    <svg class="boomerang" style="top:10%;left:8%;width:60px" viewBox="0 0 60 60">
+      <path d="M10,50 Q10,10 50,10" fill="none" stroke="var(--orange)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <svg class="boomerang" style="top:15%;right:12%;width:40px;transform:rotate(45deg)" viewBox="0 0 60 60">
+      <path d="M10,50 Q10,10 50,10" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <svg class="boomerang" style="bottom:15%;left:15%;width:50px;transform:rotate(-30deg)" viewBox="0 0 60 60">
+      <path d="M10,50 Q10,10 50,10" fill="none" stroke="var(--mustard)" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </section>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="20,2 25,15 38,15 27,24 31,38 20,29 9,38 13,24 2,15 15,15" fill="var(--walnut)"/>
+    </svg>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ===== CATALOG SECTION ===== -->
+  <section class="catalog">
+
+    <!-- Card 1: Womb Chair -->
+    <div class="catalog-card">
+      <div class="catalog-chair">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <g fill="var(--orange)">
+            <!-- Womb chair shell -->
+            <path d="M30,100 Q20,50 60,30 Q100,10 140,30 Q180,50 170,100 Q165,130 160,140 L40,140 Q35,130 30,100 Z" opacity="0.7"/>
+            <!-- Cushion -->
+            <path d="M50,90 Q48,65 80,50 Q110,40 140,55 Q160,70 155,95 L50,95 Z" fill="var(--walnut)" opacity="0.3"/>
+            <!-- Seat -->
+            <rect x="45" y="120" width="110" height="20" rx="5" fill="var(--walnut)" opacity="0.2"/>
+          </g>
+          <!-- Legs -->
+          <g stroke="var(--walnut)" stroke-width="2.5" stroke-linecap="round" opacity="0.6">
+            <line x1="55" y1="140" x2="35" y2="175"/>
+            <line x1="145" y1="140" x2="165" y2="175"/>
+            <line x1="75" y1="140" x2="65" y2="175"/>
+            <line x1="125" y1="140" x2="135" y2="175"/>
+          </g>
+          <!-- Cross bars -->
+          <g stroke="var(--walnut)" stroke-width="1.5" opacity="0.4">
+            <line x1="35" y1="175" x2="65" y2="175"/>
+            <line x1="135" y1="175" x2="165" y2="175"/>
+            <line x1="50" y1="158" x2="150" y2="158"/>
+          </g>
+        </svg>
+      </div>
+      <div class="catalog-text">
+        <div class="label">On Comfort</div>
+        <h2>Great design is about finding the perfect pair.</h2>
+        <p>Like the Eames Lounge Chair and Ottoman. Like Saarinen's Womb Chair and a lazy Sunday. Some things are meant to go together.</p>
+      </div>
+    </div>
+
+    <!-- Card 2: Shell Chair -->
+    <div class="catalog-card">
+      <div class="catalog-chair">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <!-- Shell -->
+            <path d="M40,90 Q35,45 70,25 Q100,10 130,25 Q165,45 160,90 Q158,110 155,120 L45,120 Q42,110 40,90 Z" fill="var(--teal)" opacity="0.65"/>
+            <!-- Inner shadow -->
+            <path d="M55,85 Q52,55 80,40 Q100,30 120,40 Q148,55 145,85 L55,88 Z" fill="var(--walnut)" opacity="0.1"/>
+          </g>
+          <!-- Eiffel base -->
+          <g stroke="var(--walnut)" stroke-width="2" stroke-linecap="round" opacity="0.6">
+            <line x1="100" y1="120" x2="100" y2="140"/>
+            <line x1="100" y1="140" x2="55" y2="180"/>
+            <line x1="100" y1="140" x2="145" y2="180"/>
+            <line x1="100" y1="140" x2="70" y2="180"/>
+            <line x1="100" y1="140" x2="130" y2="180"/>
+            <!-- Cross braces -->
+            <line x1="65" y1="165" x2="135" y2="165"/>
+            <line x1="78" y1="155" x2="122" y2="155"/>
+          </g>
+        </svg>
+      </div>
+      <div class="catalog-text">
+        <div class="label">On Form</div>
+        <h2>Beauty meets function in the best partnerships.</h2>
+        <p>Molded curves. Clean lines. Nothing unnecessary. The best relationships&mdash;like the best chairs&mdash;have an effortless kind of elegance.</p>
+      </div>
+    </div>
+
+    <!-- Card 3: Tulip Chair -->
+    <div class="catalog-card">
+      <div class="catalog-chair">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <!-- Tulip seat -->
+            <path d="M45,100 Q40,60 70,40 Q100,25 130,40 Q160,60 155,100 Q153,115 150,120 L50,120 Q47,115 45,100 Z" fill="var(--mustard)" opacity="0.55"/>
+            <!-- Cushion -->
+            <ellipse cx="100" cy="105" rx="48" ry="12" fill="var(--orange)" opacity="0.45"/>
+            <!-- Pedestal -->
+            <path d="M90,120 Q88,140 85,155 Q80,170 70,180 L130,180 Q120,170 115,155 Q112,140 110,120 Z" fill="var(--walnut)" opacity="0.55"/>
+            <!-- Base -->
+            <ellipse cx="100" cy="182" rx="40" ry="8" fill="var(--walnut)" opacity="0.45"/>
+          </g>
+        </svg>
+      </div>
+      <div class="catalog-text">
+        <div class="label">On Unity</div>
+        <h2>One pedestal. No clutter. Just us.</h2>
+        <p>Saarinen designed the Tulip to clear away the &ldquo;ugly, confusing, unrestful world&rdquo; under chairs. Sometimes you just need to strip it back to what matters most.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <svg viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg" style="width:50px;height:25px">
+      <path d="M5,15 Q5,5 20,5 Q35,5 35,15" fill="none" stroke="var(--walnut)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ===== THE ASK ===== -->
+  <section class="the-ask">
+    <svg class="boomerang" style="top:10%;right:10%;width:70px;transform:rotate(120deg)" viewBox="0 0 60 60">
+      <path d="M10,50 Q10,10 50,10" fill="none" stroke="var(--orange)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <svg class="boomerang" style="bottom:20%;left:8%;width:45px;transform:rotate(-60deg)" viewBox="0 0 60 60">
+      <path d="M10,50 Q10,10 50,10" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+
+    <h2>Will you be<br>my <span>Valentine?</span></h2>
+
+    <div class="buttons">
+      <button class="btn btn-yes" data-tag="No. 14" onclick="sayYes()">Yes</button>
+      <button class="btn btn-maybe" data-tag="Feb" id="maybeBtn">Let me think...</button>
+    </div>
+  </section>
+
+  <!-- ===== RESPONSE ===== -->
+  <div class="response-overlay" id="response">
+    <div class="response-heart">
+      <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40,70 L12,42 Q0,28 12,16 Q24,4 40,18 Q56,4 68,16 Q80,28 68,42 Z" fill="var(--orange)"/>
+      </svg>
+    </div>
+    <h2>Best seat in the house &mdash;<br>right next to <em style="color:var(--orange);font-style:italic">you</em>.</h2>
+    <p>Happy Valentine's Day.</p>
+  </div>
+
+  <script>
+    // Scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.catalog-card, .the-ask h2, .buttons').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== FLEEING BUTTON =====
+    const maybeBtn = document.getElementById('maybeBtn');
+    const yesBtn = document.querySelector('.btn-yes');
+    let fleeCount = 0;
+
+    const fleeTexts = [
+      "Let me think...",
+      "Wait, come back!",
+      "Okay okay...",
+      "I'm running out of room!",
+      "Fine, you win!",
+      "Just say yes!",
+    ];
+
+    function flee() {
+      fleeCount++;
+      maybeBtn.classList.add('fleeing');
+
+      // Update button text
+      const textIndex = Math.min(fleeCount, fleeTexts.length - 1);
+      maybeBtn.textContent = fleeTexts[textIndex];
+
+      // Get the bounds of the section to keep it in view
+      const section = document.querySelector('.the-ask');
+      const sectionRect = section.getBoundingClientRect();
+      const btnRect = maybeBtn.getBoundingClientRect();
+
+      // Random position within the ask section
+      const padding = 20;
+      const maxX = sectionRect.width - btnRect.width - padding * 2;
+      const maxY = sectionRect.height * 0.4;
+
+      const newX = (Math.random() - 0.5) * maxX;
+      const newY = Math.random() * maxY + 20;
+
+      maybeBtn.style.transform = `translate(${newX}px, ${newY}px) rotate(${(Math.random() - 0.5) * 20}deg)`;
+
+      // Shrink it a bit each time
+      if (fleeCount > 2) {
+        maybeBtn.classList.add('shrinking');
+      }
+
+      // Make the yes button grow with each flee
+      const scale = 1 + fleeCount * 0.08;
+      yesBtn.style.transform = `scale(${Math.min(scale, 1.5)})`;
+      yesBtn.style.boxShadow = `0 ${4 + fleeCount * 2}px ${15 + fleeCount * 5}px rgba(200, 75, 49, ${0.2 + fleeCount * 0.05})`;
+
+      // After enough attempts, button gives up and triggers yes
+      if (fleeCount >= 6) {
+        maybeBtn.style.transition = 'all 0.5s ease';
+        maybeBtn.style.transform = 'translate(0, 0) scale(0)';
+        maybeBtn.style.opacity = '0';
+        setTimeout(() => sayYes(), 600);
+      }
+    }
+
+    // Desktop: flee on hover
+    maybeBtn.addEventListener('mouseenter', flee);
+
+    // Mobile: flee on touch
+    maybeBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      flee();
+    });
+
+    // Confetti
+    function createConfetti() {
+      const colors = ['#C84B31', '#E8D21D', '#2D6E7E', '#5C3D2E', '#FAF3E0'];
+      const shapes = ['circle', 'rect', 'diamond'];
+
+      for (let i = 0; i < 80; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const size = Math.random() * 10 + 5;
+        const startX = Math.random() * window.innerWidth;
+        const startY = -20;
+        const endX = startX + (Math.random() - 0.5) * 400;
+        const endY = window.innerHeight + 20;
+        const rotation = Math.random() * 720;
+        const duration = Math.random() * 2 + 2;
+        const delay = Math.random() * 0.8;
+
+        piece.style.left = startX + 'px';
+        piece.style.top = startY + 'px';
+        piece.style.width = size + 'px';
+        piece.style.height = shape === 'rect' ? size * 0.6 + 'px' : size + 'px';
+        piece.style.background = color;
+        piece.style.borderRadius = shape === 'circle' ? '50%' : shape === 'diamond' ? '2px' : '1px';
+        piece.style.transform = shape === 'diamond' ? 'rotate(45deg)' : '';
+        piece.style.transition = `all ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s`;
+
+        document.body.appendChild(piece);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            piece.style.left = endX + 'px';
+            piece.style.top = endY + 'px';
+            piece.style.transform = `rotate(${rotation}deg)`;
+            piece.style.opacity = '0';
+          });
+        });
+
+        setTimeout(() => piece.remove(), (duration + delay + 0.5) * 1000);
+      }
+    }
+
+    // The big reveal
+    function sayYes() {
+      const overlay = document.getElementById('response');
+      overlay.classList.add('active');
+      createConfetti();
+      setTimeout(createConfetti, 1000);
+    }
+  </script>
+
+</body>
+</html>
