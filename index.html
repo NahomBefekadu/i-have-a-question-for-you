@@ -23,11 +23,22 @@
       --warm-white: #FFF8F0;
     }
 
+    /* Purple midcentury theme */
+    [data-theme="purple"] {
+      --orange: #7B4B94;
+      --mustard: #D4A0C0;
+      --teal: #9B72AA;
+      --cream: #F5F0F7;
+      --walnut: #3D2944;
+      --warm-white: #FAF5FC;
+    }
+
     body {
       font-family: 'DM Sans', sans-serif;
       background-color: var(--cream);
       color: var(--walnut);
       overflow-x: hidden;
+      transition: background-color 0.6s ease, color 0.6s ease;
     }
 
     /* Grain texture overlay */
@@ -44,6 +55,126 @@
 
     h1, h2, h3 {
       font-family: 'Jost', sans-serif;
+    }
+
+    /* ===== THEME SWITCHER ===== */
+    .theme-switcher {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: var(--warm-white);
+      border: 1.5px solid var(--walnut);
+      border-radius: 0;
+      padding: 0.45rem 1rem 0.45rem 0.55rem;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--walnut);
+      font-weight: 500;
+      transition: all 0.4s ease;
+      opacity: 0.8;
+      box-shadow: 2px 2px 0 var(--walnut);
+    }
+
+    .theme-switcher:hover {
+      opacity: 1;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--walnut);
+    }
+
+    .switcher-chair {
+      width: 28px;
+      height: 28px;
+      position: relative;
+    }
+
+    .switcher-chair svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .switcher-chair .chair-warm {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+
+    .switcher-chair .chair-cool {
+      opacity: 0;
+      transform: rotate(-90deg);
+    }
+
+    [data-theme="purple"] .switcher-chair .chair-warm {
+      opacity: 0;
+      transform: rotate(90deg);
+    }
+
+    [data-theme="purple"] .switcher-chair .chair-cool {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+
+    /* ===== CHAIR THEME SWITCHING ===== */
+    .chair-set-warm, .chair-set-cool {
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .chair-set-warm {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .chair-set-cool {
+      opacity: 0;
+      transform: scale(0.85);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    [data-theme="purple"] .chair-set-warm {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+
+    [data-theme="purple"] .chair-set-cool {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .chair-container {
+      position: relative;
+    }
+
+    /* Hero chair container */
+    .hero-chair-wrap {
+      position: relative;
+      width: 220px;
+      height: 280px;
+      margin-bottom: 2rem;
+      animation: floatIn 1.2s ease-out;
+      filter: drop-shadow(0 8px 24px rgba(92, 61, 46, 0.15));
+    }
+
+    .hero-chair-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-chair-wrap .chair-set-cool {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* ===== HERO SECTION ===== */
@@ -76,14 +207,6 @@
       to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .hero-chair {
-      width: 220px;
-      height: auto;
-      margin-bottom: 2rem;
-      animation: floatIn 1.2s ease-out;
-      filter: drop-shadow(0 8px 24px rgba(92, 61, 46, 0.15));
-    }
-
     .hero h1 {
       font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 300;
@@ -97,6 +220,7 @@
       font-style: italic;
       color: var(--orange);
       font-weight: 500;
+      transition: color 0.5s ease;
     }
 
     .hero .subtitle {
@@ -189,11 +313,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     .catalog-chair svg {
       width: 100%;
       height: 100%;
+    }
+
+    .catalog-chair .chair-set-cool {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .catalog-text {
@@ -208,6 +339,7 @@
       color: var(--teal);
       margin-bottom: 0.5rem;
       font-weight: 500;
+      transition: color 0.5s ease;
     }
 
     .catalog-text h2 {
@@ -255,6 +387,7 @@
       color: var(--orange);
       font-weight: 500;
       font-style: italic;
+      transition: color 0.5s ease;
     }
 
     .buttons {
@@ -295,9 +428,9 @@
     }
 
     .btn-yes:hover {
-      background: #b5412a;
+      filter: brightness(0.9);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(200, 75, 49, 0.3);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
     .btn-maybe {
@@ -333,6 +466,7 @@
       padding: 2px 6px;
       letter-spacing: 0.08em;
       font-weight: 600;
+      transition: background-color 0.5s ease;
     }
 
     /* ===== RESPONSE OVERLAY ===== */
@@ -436,18 +570,61 @@
         height: 150px;
       }
 
-      .hero-chair {
+      .hero-chair-wrap {
         width: 160px;
+        height: 200px;
       }
 
       .btn {
         padding: 0.85rem 2rem;
         font-size: 1rem;
       }
+
+      .theme-switcher {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.35rem 0.7rem 0.35rem 0.4rem;
+        font-size: 0.6rem;
+        gap: 0.4rem;
+      }
+
+      .switcher-chair {
+        width: 22px;
+        height: 22px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- ===== THEME SWITCHER (Chair Icon) ===== -->
+  <button class="theme-switcher" id="themeSwitcher" onclick="toggleTheme()">
+    <span class="switcher-chair">
+      <!-- Mini Eames silhouette (warm) -->
+      <svg class="chair-warm" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <g fill="var(--walnut)">
+          <path d="M8,16 Q6,12 8,8 Q10,4 16,3 Q22,2 28,6 Q32,10 31,16 L10,16 Z" opacity="0.85"/>
+          <path d="M10,10 Q12,6 18,5 Q24,4 28,8 L11,12 Z" fill="var(--orange)" opacity="0.6"/>
+          <path d="M15,18 L14,24 Q13,26 11,27 L16,25 Z" opacity="0.6"/>
+          <path d="M25,18 L26,24 Q27,26 29,27 L24,25 Z" opacity="0.6"/>
+          <rect x="12" y="30" width="16" height="5" rx="1.5" opacity="0.6"/>
+          <rect x="13" y="30.5" width="14" height="2" rx="1" fill="var(--orange)" opacity="0.5"/>
+        </g>
+      </svg>
+      <!-- Mini Barcelona silhouette (cool) -->
+      <svg class="chair-cool" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <g fill="var(--walnut)">
+          <path d="M5,18 Q5,10 12,7 L28,7 Q35,10 35,18 L35,22 L5,22 Z" opacity="0.7"/>
+          <path d="M7,11 L33,11 L33,19 L7,19 Z" fill="var(--orange)" opacity="0.5"/>
+          <path d="M8,22 Q6,28 8,32" fill="none" stroke="var(--walnut)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M32,22 Q34,28 32,32" fill="none" stroke="var(--walnut)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          <line x1="8" y1="32" x2="32" y2="32" stroke="var(--walnut)" stroke-width="1.5" opacity="0.5"/>
+          <rect x="6" y="34" width="28" height="3" rx="1" opacity="0.5"/>
+        </g>
+      </svg>
+    </span>
+    Switch Design
+  </button>
 
   <!-- ===== HERO ===== -->
   <section class="hero">
@@ -467,28 +644,53 @@
       <circle cx="400" cy="400" r="300" fill="none" stroke="#5C3D2E" stroke-width="0.5"/>
     </svg>
 
-    <!-- Eames Lounge Chair silhouette -->
-    <svg class="hero-chair" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
-      <g fill="var(--walnut)">
-        <!-- Seat/shell -->
-        <path d="M60,120 Q40,100 50,70 Q60,40 100,30 Q140,20 170,25 Q200,30 230,50 Q260,70 255,100 Q250,130 240,150 L60,150 Z" opacity="0.85"/>
-        <!-- Back cushion -->
-        <path d="M65,85 Q70,55 110,45 Q150,38 180,42 Q210,48 235,65 Q245,80 240,100 L70,105 Z" fill="var(--orange)" opacity="0.6"/>
-        <!-- Seat cushion -->
-        <path d="M65,150 Q63,135 70,120 L240,120 Q245,135 242,150 Z" fill="var(--orange)" opacity="0.5"/>
-        <!-- Base/pedestal -->
-        <path d="M120,155 L115,180 Q110,190 100,195 L80,205 Q75,208 78,212 Q82,216 90,213 L130,195 L135,155 Z" opacity="0.7"/>
-        <path d="M180,155 L185,180 Q190,190 200,195 L220,205 Q225,208 222,212 Q218,216 210,213 L170,195 L165,155 Z" opacity="0.7"/>
-        <!-- Cross bar -->
-        <path d="M95,200 Q150,180 205,200" fill="none" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
-        <!-- Ottoman -->
-        <rect x="90" y="230" width="120" height="35" rx="8" opacity="0.7"/>
-        <rect x="95" y="232" width="110" height="15" rx="5" fill="var(--orange)" opacity="0.5"/>
-        <!-- Ottoman legs -->
-        <line x1="105" y1="265" x2="98" y2="278" stroke="var(--walnut)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="195" y1="265" x2="202" y2="278" stroke="var(--walnut)" stroke-width="3" stroke-linecap="round"/>
-      </g>
-    </svg>
+    <!-- Hero Chair Container -->
+    <div class="hero-chair-wrap">
+      <!-- WARM: Eames Lounge Chair + Ottoman -->
+      <div class="chair-set-warm">
+        <svg viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+          <g fill="var(--walnut)">
+            <path d="M60,120 Q40,100 50,70 Q60,40 100,30 Q140,20 170,25 Q200,30 230,50 Q260,70 255,100 Q250,130 240,150 L60,150 Z" opacity="0.85"/>
+            <path d="M65,85 Q70,55 110,45 Q150,38 180,42 Q210,48 235,65 Q245,80 240,100 L70,105 Z" fill="var(--orange)" opacity="0.6"/>
+            <path d="M65,150 Q63,135 70,120 L240,120 Q245,135 242,150 Z" fill="var(--orange)" opacity="0.5"/>
+            <path d="M120,155 L115,180 Q110,190 100,195 L80,205 Q75,208 78,212 Q82,216 90,213 L130,195 L135,155 Z" opacity="0.7"/>
+            <path d="M180,155 L185,180 Q190,190 200,195 L220,205 Q225,208 222,212 Q218,216 210,213 L170,195 L165,155 Z" opacity="0.7"/>
+            <path d="M95,200 Q150,180 205,200" fill="none" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
+            <rect x="90" y="230" width="120" height="35" rx="8" opacity="0.7"/>
+            <rect x="95" y="232" width="110" height="15" rx="5" fill="var(--orange)" opacity="0.5"/>
+            <line x1="105" y1="265" x2="98" y2="278" stroke="var(--walnut)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="195" y1="265" x2="202" y2="278" stroke="var(--walnut)" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <!-- COOL: Barcelona Chair (Mies van der Rohe) -->
+      <div class="chair-set-cool">
+        <svg viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+          <g fill="var(--walnut)">
+            <!-- Back frame - elegant X shape -->
+            <path d="M55,60 Q55,40 75,35 L225,35 Q245,40 245,60 L245,140 L55,140 Z" opacity="0.15"/>
+            <!-- Tufted back cushion -->
+            <rect x="65" y="42" width="170" height="90" rx="4" fill="var(--orange)" opacity="0.55"/>
+            <!-- Tuft lines on back -->
+            <line x1="105" y1="48" x2="105" y2="126" stroke="var(--walnut)" stroke-width="0.8" opacity="0.2"/>
+            <line x1="150" y1="48" x2="150" y2="126" stroke="var(--walnut)" stroke-width="0.8" opacity="0.2"/>
+            <line x1="195" y1="48" x2="195" y2="126" stroke="var(--walnut)" stroke-width="0.8" opacity="0.2"/>
+            <!-- Seat cushion -->
+            <rect x="55" y="145" width="190" height="40" rx="5" fill="var(--orange)" opacity="0.6"/>
+            <!-- Tuft lines on seat -->
+            <line x1="105" y1="150" x2="105" y2="180" stroke="var(--walnut)" stroke-width="0.8" opacity="0.2"/>
+            <line x1="150" y1="150" x2="150" y2="180" stroke="var(--walnut)" stroke-width="0.8" opacity="0.2"/>
+            <line x1="195" y1="150" x2="195" y2="180" stroke="var(--walnut)" stroke-width="0.8" opacity="0.2"/>
+            <!-- X-frame legs - the iconic Barcelona cross -->
+            <path d="M70,190 Q60,210 55,240 Q52,255 60,265" fill="none" stroke="var(--walnut)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+            <path d="M230,190 Q240,210 245,240 Q248,255 240,265" fill="none" stroke="var(--walnut)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+            <!-- Cross of X -->
+            <path d="M70,190 Q150,250 230,190" fill="none" stroke="var(--walnut)" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+            <path d="M60,265 L240,265" fill="none" stroke="var(--walnut)" stroke-width="3" opacity="0.35"/>
+          </g>
+        </svg>
+      </div>
+    </div>
 
     <h1>I've been thinking<br>about <em>design</em>...</h1>
     <p class="subtitle">And I have a proposal for you.</p>
@@ -519,32 +721,53 @@
   <!-- ===== CATALOG SECTION ===== -->
   <section class="catalog">
 
-    <!-- Card 1: Womb Chair -->
+    <!-- Card 1 -->
     <div class="catalog-card">
       <div class="catalog-chair">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <g fill="var(--orange)">
-            <!-- Womb chair shell -->
-            <path d="M30,100 Q20,50 60,30 Q100,10 140,30 Q180,50 170,100 Q165,130 160,140 L40,140 Q35,130 30,100 Z" opacity="0.7"/>
-            <!-- Cushion -->
-            <path d="M50,90 Q48,65 80,50 Q110,40 140,55 Q160,70 155,95 L50,95 Z" fill="var(--walnut)" opacity="0.3"/>
-            <!-- Seat -->
-            <rect x="45" y="120" width="110" height="20" rx="5" fill="var(--walnut)" opacity="0.2"/>
-          </g>
-          <!-- Legs -->
-          <g stroke="var(--walnut)" stroke-width="2.5" stroke-linecap="round" opacity="0.6">
-            <line x1="55" y1="140" x2="35" y2="175"/>
-            <line x1="145" y1="140" x2="165" y2="175"/>
-            <line x1="75" y1="140" x2="65" y2="175"/>
-            <line x1="125" y1="140" x2="135" y2="175"/>
-          </g>
-          <!-- Cross bars -->
-          <g stroke="var(--walnut)" stroke-width="1.5" opacity="0.4">
-            <line x1="35" y1="175" x2="65" y2="175"/>
-            <line x1="135" y1="175" x2="165" y2="175"/>
-            <line x1="50" y1="158" x2="150" y2="158"/>
-          </g>
-        </svg>
+        <!-- WARM: Womb Chair -->
+        <div class="chair-set-warm">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g fill="var(--orange)">
+              <path d="M30,100 Q20,50 60,30 Q100,10 140,30 Q180,50 170,100 Q165,130 160,140 L40,140 Q35,130 30,100 Z" opacity="0.7"/>
+              <path d="M50,90 Q48,65 80,50 Q110,40 140,55 Q160,70 155,95 L50,95 Z" fill="var(--walnut)" opacity="0.3"/>
+              <rect x="45" y="120" width="110" height="20" rx="5" fill="var(--walnut)" opacity="0.2"/>
+            </g>
+            <g stroke="var(--walnut)" stroke-width="2.5" stroke-linecap="round" opacity="0.6">
+              <line x1="55" y1="140" x2="35" y2="175"/>
+              <line x1="145" y1="140" x2="165" y2="175"/>
+              <line x1="75" y1="140" x2="65" y2="175"/>
+              <line x1="125" y1="140" x2="135" y2="175"/>
+            </g>
+            <g stroke="var(--walnut)" stroke-width="1.5" opacity="0.4">
+              <line x1="35" y1="175" x2="65" y2="175"/>
+              <line x1="135" y1="175" x2="165" y2="175"/>
+              <line x1="50" y1="158" x2="150" y2="158"/>
+            </g>
+          </svg>
+        </div>
+        <!-- COOL: Egg Chair (Arne Jacobsen) -->
+        <div class="chair-set-cool">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <!-- Egg shell - tall ovoid -->
+              <path d="M45,110 Q30,60 50,30 Q70,5 100,5 Q130,5 150,30 Q170,60 155,110 Q150,130 145,140 L55,140 Q50,130 45,110 Z" fill="var(--orange)" opacity="0.65"/>
+              <!-- Inner hollow -->
+              <path d="M60,105 Q50,65 65,40 Q80,18 100,18 Q120,18 135,40 Q150,65 140,105 L60,108 Z" fill="var(--walnut)" opacity="0.12"/>
+              <!-- Seat cushion -->
+              <ellipse cx="100" cy="125" rx="38" ry="10" fill="var(--orange)" opacity="0.45"/>
+            </g>
+            <!-- Pedestal base -->
+            <g fill="var(--walnut)" opacity="0.6">
+              <path d="M92,142 L90,165 Q88,172 86,175 L114,175 Q112,172 110,165 L108,142 Z"/>
+              <!-- Star base -->
+              <ellipse cx="100" cy="178" rx="35" ry="6"/>
+              <line x1="65" y1="178" x2="100" y2="178" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
+              <line x1="100" y1="178" x2="135" y2="178" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
+              <line x1="78" y1="170" x2="100" y2="178" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
+              <line x1="122" y1="170" x2="100" y2="178" stroke="var(--walnut)" stroke-width="3" opacity="0.5"/>
+            </g>
+          </svg>
+        </div>
       </div>
       <div class="catalog-text">
         <div class="label">On Comfort</div>
@@ -553,28 +776,57 @@
       </div>
     </div>
 
-    <!-- Card 2: Shell Chair -->
+    <!-- Card 2 -->
     <div class="catalog-card">
       <div class="catalog-chair">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <!-- Shell -->
-            <path d="M40,90 Q35,45 70,25 Q100,10 130,25 Q165,45 160,90 Q158,110 155,120 L45,120 Q42,110 40,90 Z" fill="var(--teal)" opacity="0.65"/>
-            <!-- Inner shadow -->
-            <path d="M55,85 Q52,55 80,40 Q100,30 120,40 Q148,55 145,85 L55,88 Z" fill="var(--walnut)" opacity="0.1"/>
-          </g>
-          <!-- Eiffel base -->
-          <g stroke="var(--walnut)" stroke-width="2" stroke-linecap="round" opacity="0.6">
-            <line x1="100" y1="120" x2="100" y2="140"/>
-            <line x1="100" y1="140" x2="55" y2="180"/>
-            <line x1="100" y1="140" x2="145" y2="180"/>
-            <line x1="100" y1="140" x2="70" y2="180"/>
-            <line x1="100" y1="140" x2="130" y2="180"/>
-            <!-- Cross braces -->
-            <line x1="65" y1="165" x2="135" y2="165"/>
-            <line x1="78" y1="155" x2="122" y2="155"/>
-          </g>
-        </svg>
+        <!-- WARM: Shell Chair -->
+        <div class="chair-set-warm">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <path d="M40,90 Q35,45 70,25 Q100,10 130,25 Q165,45 160,90 Q158,110 155,120 L45,120 Q42,110 40,90 Z" fill="var(--teal)" opacity="0.65"/>
+              <path d="M55,85 Q52,55 80,40 Q100,30 120,40 Q148,55 145,85 L55,88 Z" fill="var(--walnut)" opacity="0.1"/>
+            </g>
+            <g stroke="var(--walnut)" stroke-width="2" stroke-linecap="round" opacity="0.6">
+              <line x1="100" y1="120" x2="100" y2="140"/>
+              <line x1="100" y1="140" x2="55" y2="180"/>
+              <line x1="100" y1="140" x2="145" y2="180"/>
+              <line x1="100" y1="140" x2="70" y2="180"/>
+              <line x1="100" y1="140" x2="130" y2="180"/>
+              <line x1="65" y1="165" x2="135" y2="165"/>
+              <line x1="78" y1="155" x2="122" y2="155"/>
+            </g>
+          </svg>
+        </div>
+        <!-- COOL: Bertoia Diamond Chair -->
+        <div class="chair-set-cool">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <!-- Wire diamond shape -->
+              <path d="M30,95 Q25,50 60,25 Q100,0 140,25 Q175,50 170,95 Q168,115 165,125 L35,125 Q32,115 30,95 Z" fill="none" stroke="var(--teal)" stroke-width="2" opacity="0.7"/>
+              <!-- Wire grid pattern -->
+              <line x1="50" y1="25" x2="45" y2="120" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <line x1="80" y1="12" x2="70" y2="122" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <line x1="120" y1="12" x2="130" y2="122" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <line x1="150" y1="25" x2="155" y2="120" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <!-- Horizontal wires -->
+              <path d="M35,50 Q100,40 165,50" fill="none" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M30,75 Q100,65 170,75" fill="none" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M32,100 Q100,90 168,100" fill="none" stroke="var(--teal)" stroke-width="0.8" opacity="0.35"/>
+              <!-- Seat pad -->
+              <path d="M55,70 Q55,55 75,48 Q100,42 125,48 Q145,55 145,70 Q145,100 140,115 L60,115 Q55,100 55,70 Z" fill="var(--orange)" opacity="0.35"/>
+            </g>
+            <!-- Legs -->
+            <g stroke="var(--walnut)" stroke-width="2.5" stroke-linecap="round" opacity="0.6">
+              <line x1="50" y1="125" x2="35" y2="175"/>
+              <line x1="150" y1="125" x2="165" y2="175"/>
+              <!-- Cross bar -->
+              <line x1="35" y1="175" x2="165" y2="175"/>
+              <line x1="80" y1="125" x2="75" y2="155"/>
+              <line x1="120" y1="125" x2="125" y2="155"/>
+              <line x1="75" y1="155" x2="125" y2="155"/>
+            </g>
+          </svg>
+        </div>
       </div>
       <div class="catalog-text">
         <div class="label">On Form</div>
@@ -583,21 +835,51 @@
       </div>
     </div>
 
-    <!-- Card 3: Tulip Chair -->
+    <!-- Card 3 -->
     <div class="catalog-card">
       <div class="catalog-chair">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <!-- Tulip seat -->
-            <path d="M45,100 Q40,60 70,40 Q100,25 130,40 Q160,60 155,100 Q153,115 150,120 L50,120 Q47,115 45,100 Z" fill="var(--mustard)" opacity="0.55"/>
-            <!-- Cushion -->
-            <ellipse cx="100" cy="105" rx="48" ry="12" fill="var(--orange)" opacity="0.45"/>
-            <!-- Pedestal -->
-            <path d="M90,120 Q88,140 85,155 Q80,170 70,180 L130,180 Q120,170 115,155 Q112,140 110,120 Z" fill="var(--walnut)" opacity="0.55"/>
-            <!-- Base -->
-            <ellipse cx="100" cy="182" rx="40" ry="8" fill="var(--walnut)" opacity="0.45"/>
-          </g>
-        </svg>
+        <!-- WARM: Tulip Chair -->
+        <div class="chair-set-warm">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <path d="M45,100 Q40,60 70,40 Q100,25 130,40 Q160,60 155,100 Q153,115 150,120 L50,120 Q47,115 45,100 Z" fill="var(--mustard)" opacity="0.55"/>
+              <ellipse cx="100" cy="105" rx="48" ry="12" fill="var(--orange)" opacity="0.45"/>
+              <path d="M90,120 Q88,140 85,155 Q80,170 70,180 L130,180 Q120,170 115,155 Q112,140 110,120 Z" fill="var(--walnut)" opacity="0.55"/>
+              <ellipse cx="100" cy="182" rx="40" ry="8" fill="var(--walnut)" opacity="0.45"/>
+            </g>
+          </svg>
+        </div>
+        <!-- COOL: Platner Chair -->
+        <div class="chair-set-cool">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <!-- Wire cage base - radiating lines -->
+              <g stroke="var(--mustard)" stroke-width="1" opacity="0.45">
+                <line x1="100" y1="105" x2="40" y2="180"/>
+                <line x1="100" y1="105" x2="52" y2="180"/>
+                <line x1="100" y1="105" x2="64" y2="180"/>
+                <line x1="100" y1="105" x2="76" y2="180"/>
+                <line x1="100" y1="105" x2="88" y2="180"/>
+                <line x1="100" y1="105" x2="100" y2="180"/>
+                <line x1="100" y1="105" x2="112" y2="180"/>
+                <line x1="100" y1="105" x2="124" y2="180"/>
+                <line x1="100" y1="105" x2="136" y2="180"/>
+                <line x1="100" y1="105" x2="148" y2="180"/>
+                <line x1="100" y1="105" x2="160" y2="180"/>
+              </g>
+              <!-- Horizontal wire rings -->
+              <ellipse cx="100" cy="135" rx="22" ry="4" fill="none" stroke="var(--mustard)" stroke-width="0.8" opacity="0.4"/>
+              <ellipse cx="100" cy="155" rx="32" ry="5" fill="none" stroke="var(--mustard)" stroke-width="0.8" opacity="0.4"/>
+              <ellipse cx="100" cy="172" rx="42" ry="5" fill="none" stroke="var(--mustard)" stroke-width="0.8" opacity="0.4"/>
+              <!-- Seat bowl -->
+              <path d="M45,95 Q40,60 65,40 Q100,20 135,40 Q160,60 155,95 Q153,108 150,115 L50,115 Q47,108 45,95 Z" fill="var(--orange)" opacity="0.55"/>
+              <!-- Cushion -->
+              <ellipse cx="100" cy="100" rx="45" ry="14" fill="var(--mustard)" opacity="0.35"/>
+              <!-- Base disc -->
+              <ellipse cx="100" cy="182" rx="45" ry="7" fill="var(--walnut)" opacity="0.35"/>
+            </g>
+          </svg>
+        </div>
       </div>
       <div class="catalog-text">
         <div class="label">On Unity</div>
@@ -677,16 +959,13 @@
       fleeCount++;
       maybeBtn.classList.add('fleeing');
 
-      // Update button text
       const textIndex = Math.min(fleeCount, fleeTexts.length - 1);
       maybeBtn.textContent = fleeTexts[textIndex];
 
-      // Get the bounds of the section to keep it in view
       const section = document.querySelector('.the-ask');
       const sectionRect = section.getBoundingClientRect();
       const btnRect = maybeBtn.getBoundingClientRect();
 
-      // Random position within the ask section
       const padding = 20;
       const maxX = sectionRect.width - btnRect.width - padding * 2;
       const maxY = sectionRect.height * 0.4;
@@ -696,17 +975,14 @@
 
       maybeBtn.style.transform = `translate(${newX}px, ${newY}px) rotate(${(Math.random() - 0.5) * 20}deg)`;
 
-      // Shrink it a bit each time
       if (fleeCount > 2) {
         maybeBtn.classList.add('shrinking');
       }
 
-      // Make the yes button grow with each flee
       const scale = 1 + fleeCount * 0.08;
       yesBtn.style.transform = `scale(${Math.min(scale, 1.5)})`;
-      yesBtn.style.boxShadow = `0 ${4 + fleeCount * 2}px ${15 + fleeCount * 5}px rgba(200, 75, 49, ${0.2 + fleeCount * 0.05})`;
+      yesBtn.style.boxShadow = `0 ${4 + fleeCount * 2}px ${15 + fleeCount * 5}px rgba(0, 0, 0, ${0.15 + fleeCount * 0.03})`;
 
-      // After enough attempts, button gives up and triggers yes
       if (fleeCount >= 6) {
         maybeBtn.style.transition = 'all 0.5s ease';
         maybeBtn.style.transform = 'translate(0, 0) scale(0)';
@@ -715,10 +991,7 @@
       }
     }
 
-    // Desktop: flee on hover
     maybeBtn.addEventListener('mouseenter', flee);
-
-    // Mobile: flee on touch
     maybeBtn.addEventListener('touchstart', (e) => {
       e.preventDefault();
       flee();
@@ -726,7 +999,10 @@
 
     // Confetti
     function createConfetti() {
-      const colors = ['#C84B31', '#E8D21D', '#2D6E7E', '#5C3D2E', '#FAF3E0'];
+      const isPurple = document.documentElement.getAttribute('data-theme') === 'purple';
+      const colors = isPurple
+        ? ['#7B4B94', '#D4A0C0', '#9B72AA', '#3D2944', '#F5F0F7']
+        : ['#C84B31', '#E8D21D', '#2D6E7E', '#5C3D2E', '#FAF3E0'];
       const shapes = ['circle', 'rect', 'diamond'];
 
       for (let i = 0; i < 80; i++) {
@@ -773,6 +1049,13 @@
       overlay.classList.add('active');
       createConfetti();
       setTimeout(createConfetti, 1000);
+    }
+
+    // ===== THEME SWITCHER =====
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isWarm = html.getAttribute('data-theme') !== 'purple';
+      html.setAttribute('data-theme', isWarm ? 'purple' : '');
     }
   </script>
 
